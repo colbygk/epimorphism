@@ -53,7 +53,7 @@ initLayout uiConf uiST = do
 
 
 -- hides malformed html issues
-updateLayout :: forall eff h. UIConf -> UIST -> SystemST h -> Pattern -> Boolean -> EpiS eff h Unit
+updateLayout :: forall eff h. (Partial) => UIConf -> UIST -> SystemST h -> Pattern -> Boolean -> EpiS eff h Unit
 updateLayout uiConf uiST systemST pattern force = do
   when (force ||
         (systemST.frameNum `mod` uiConf.uiUpdateFreq == 0 && not systemST.paused)) do

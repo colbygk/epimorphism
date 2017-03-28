@@ -21,13 +21,13 @@ unsafeGenericObject :: forall a. Schema -> a
 unsafeGenericObject schema = unsafeGenericObjectImpl schema S.empty
 
 -- parse an entire library file
-parseLib :: forall eff a. Schema -> String -> Epi eff (StrMap a)
+parseLib :: forall eff a. (Partial) => Schema -> String -> Epi eff (StrMap a)
 parseLib schema lib = do
   let groups = A.filter ((/=) "") $ A.filter ((/=) "\n") $ split (Pattern "\n\n") lib
   A.foldM (parseGroup schema) empty groups
 
 -- parse an individual element
-parseGroup :: forall eff a. Schema -> (StrMap a) -> String -> Epi eff (StrMap a)
+parseGroup :: forall eff a. (Partial) => Schema -> (StrMap a) -> String -> Epi eff (StrMap a)
 parseGroup schema lib group = do
   let lines = A.filter ((/=) "") $ A.filter ((/=) "\n") $ split (Pattern "\n") group
 
@@ -62,7 +62,7 @@ parseGroup schema lib group = do
 
 
 -- parse a line & update an object
-parseLine :: forall eff a. Schema -> a -> String -> Epi eff a
+parseLine :: forall eff a. (Partial) => Schema -> a -> String -> Epi eff a
 parseLine schema obj line = do
   let tokens = A.filter ((/=) "") $ split (Pattern " ") line
   case (A.length tokens) of

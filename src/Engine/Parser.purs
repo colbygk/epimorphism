@@ -21,7 +21,7 @@ type CompRes = {component :: String, zOfs :: Int, parOfs :: Int, images :: Array
 
 foreign import parseT :: String -> String
 
-parseShader :: forall eff h. SystemST h -> String -> Array String -> EpiS eff h (Tuple String (Array String))
+parseShader :: forall eff h. (Partial) => SystemST h -> String -> Array String -> EpiS eff h (Tuple String (Array String))
 parseShader systemST mid includes = do
   modRef <- loadLib mid systemST.moduleRefPool "parseShaders mid"
   mod    <- lift $ readSTRef modRef
@@ -34,7 +34,7 @@ parseShader systemST mid includes = do
 
 
 -- parse a shader.  substitutions, submodules, par & zn
-parseModule :: forall eff h. Module -> SystemST h -> Int -> Int -> (Array String) -> EpiS eff h CompRes
+parseModule :: forall eff h. (Partial) => Module -> SystemST h -> Int -> Int -> (Array String) -> EpiS eff h CompRes
 parseModule mod systemST zOfs parOfs images = do
   -- substitutions (make sure this is always first)
   comp <- loadLib mod.component systemST.componentLib "parse component"

@@ -26,7 +26,7 @@ import Util (real, inj, lg, indentLines, tryRegex)
 
 foreign import addEventListeners :: forall eff. Eff eff Unit
 
-renderConsole :: forall eff h. UIConf -> UIST -> SystemST h -> Pattern -> EpiS eff h Unit
+renderConsole :: forall eff h. (Partial) => UIConf -> UIST -> SystemST h -> Pattern -> EpiS eff h Unit
 renderConsole uiConf uiST systemST pattern = do
   dsmDiv <- findElt "debugMain"
   str0 <- renderModule systemST uiConf.uiCompLib pattern.main "MAIN" Nothing
@@ -39,7 +39,7 @@ renderConsole uiConf uiST systemST pattern = do
   lift $ addEventListeners
 
 -- serializes the modRefPool into an html string for debugging.  shitcode
-renderModule :: forall eff h. SystemST h -> String -> String -> String -> Maybe String -> EpiS eff h String
+renderModule :: forall eff h. (Partial) => SystemST h -> String -> String -> String -> Maybe String -> EpiS eff h String
 renderModule systemST modLib mid title pid = do
   let lib = systemST.moduleLib
   let pool = systemST.moduleRefPool

@@ -21,7 +21,7 @@ import System (mFold, mUp, loadLib)
 import Util (dbg, lg)
 
 -- find script fuction given name
-lookupScriptFN :: forall eff h. String -> EpiS eff h (ScriptFn eff h)
+lookupScriptFN :: forall eff h. (Partial) => String -> EpiS eff h (ScriptFn eff h)
 lookupScriptFN n = case n of
   "null"         -> pure null
   "switch"       -> pure switch
@@ -33,7 +33,7 @@ lookupScriptFN n = case n of
 
 
 -- execute all scripts & script pool. abort as soon as something mutates the pattern
-runScripts :: forall eff h. STRef h (SystemST h) -> STRef h Pattern -> EpiS eff h PMut
+runScripts :: forall eff h. (Partial) => STRef h (SystemST h) -> STRef h Pattern -> EpiS eff h PMut
 runScripts ssRef pRef = do
   pattern <- lift $ readSTRef pRef
   r0 <- mFold ssRef PMutNone pattern.main (runModScripts ssRef pRef)
@@ -41,7 +41,7 @@ runScripts ssRef pRef = do
   mFold ssRef r1 pattern.vert (runModScripts ssRef pRef)
 
 
-runModScripts :: forall eff h. STRef h (SystemST h) -> STRef h Pattern -> PMut -> String -> EpiS eff h PMut
+runModScripts :: forall eff h. (Partial) => STRef h (SystemST h) -> STRef h Pattern -> PMut -> String -> EpiS eff h PMut
 runModScripts ssRef pRef mut mid = do
   systemST <- lift $ readSTRef ssRef
   mRef     <- loadLib mid systemST.moduleRefPool "mid! runScripts"
@@ -50,7 +50,7 @@ runModScripts ssRef pRef mut mid = do
   foldM (runScript ssRef pRef mid) mut m.scripts
 
 
-runScript :: forall eff h. STRef h (SystemST h) -> STRef h Pattern -> String -> PMut -> String -> EpiS eff h PMut
+runScript :: forall eff h. (Partial) => STRef h (SystemST h) -> STRef h Pattern -> String -> PMut -> String -> EpiS eff h PMut
 runScript ssRef pRef mid x scr = do
   --dbg $ "running script : " <> scr <> " : for " <> mid
   --dbg x

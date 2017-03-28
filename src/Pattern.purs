@@ -21,7 +21,7 @@ import Util (dbg, uuid)
 ------------------------ FIND ------------------------
 
 -- find a module given an address - ie main.application.t or a reference
-findModule :: forall eff h. StrMap (STRef h Module) -> Pattern -> String -> Boolean -> EpiS eff h String
+findModule :: forall eff h. (Partial) => StrMap (STRef h Module) -> Pattern -> String -> Boolean -> EpiS eff h String
 findModule mpool pattern dt followSwitch = do
   case (member dt mpool) of
     true -> pure dt
@@ -35,7 +35,7 @@ findModule mpool pattern dt followSwitch = do
         Just x      -> throwError $ "value should be main, vert, or disp : " <> x
 
 
-findModule' :: forall eff h. StrMap (STRef h Module) -> String -> Array String -> Boolean -> EpiS eff h String
+findModule' :: forall eff h. (Partial) => StrMap (STRef h Module) -> String -> Array String -> Boolean -> EpiS eff h String
 findModule' mpool mid addr followSwitch = do
   maybe (pure $ mid) handle (head addr)
   where
@@ -73,7 +73,7 @@ findAddr mpool pattern mid = do
       pure $ val <> res
 
 
-findParent :: forall eff h. StrMap (STRef h Module) -> Pattern -> String -> EpiS eff h (Tuple String String)
+findParent :: forall eff h. (Partial) => StrMap (STRef h Module) -> Pattern -> String -> EpiS eff h (Tuple String String)
 findParent mpool pattern mid = do
   addr <- findAddr mpool pattern mid
 

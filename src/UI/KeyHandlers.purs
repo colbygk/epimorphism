@@ -13,7 +13,7 @@ import Util (inj)
 -- converts key codes into command sequences
 type KeyHandler = forall eff h. STRef h UIConf -> STRef h UIST -> String -> Eff (canvas :: CANVAS, dom :: DOM, st :: ST h | eff) String
 
-keyHandler :: KeyHandler
+keyHandler :: (Partial) => KeyHandler
 keyHandler ucRef usRef char = do
   uiConf <- readSTRef ucRef
 
@@ -24,7 +24,7 @@ keyHandler ucRef usRef char = do
     _      -> commonKeyHandler ucRef usRef char
 
 
-devKeyHandler :: KeyHandler
+devKeyHandler :: (Partial) => KeyHandler
 devKeyHandler ucRef usRef char = do
   uiConf <- readSTRef ucRef
   uiST   <- readSTRef usRef

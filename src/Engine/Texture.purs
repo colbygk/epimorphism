@@ -100,7 +100,7 @@ foreign import uploadImageImpl :: forall eff. String ->
                                   Eff eff Unit
 
 
-clearFB :: forall eff h. EngineConf -> EngineST -> EpiS eff h Unit
+clearFB :: forall eff h. (Partial) => EngineConf -> EngineST -> EpiS eff h Unit
 clearFB engineConf engineST = do
   let ctx = engineST.ctx
   execGL ctx do

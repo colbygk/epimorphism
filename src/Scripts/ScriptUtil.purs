@@ -64,7 +64,7 @@ serializeScript (Script name phase args) =
 
 -- This method is called by scripts that modify the state tree.  we perform modificatiosn in a cloned tree so we can compile asynchronously
 -- I don't like how this modifies ssRef
-getClone :: forall eff h. STRef h (SystemST h) -> STRef h Pattern -> String -> EpiS eff h CloneRes
+getClone :: forall eff h. (Partial) => STRef h (SystemST h) -> STRef h Pattern -> String -> EpiS eff h CloneRes
 getClone ssRef pRef mid = do
   systemST <- lift $ readSTRef ssRef
   pattern  <- lift $ readSTRef pRef

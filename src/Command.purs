@@ -29,7 +29,7 @@ import Util (halt, Now, cxFromStringE, intFromStringE, numFromStringE, lg, uuid,
 
 foreign import saveCanvas :: forall eff. Eff eff Unit
 
-command :: forall eff h. STRef h UIConf -> STRef h UIST -> STRef h EngineConf -> STRef h EngineST -> STRef h Pattern -> STRef h SystemConf -> STRef h (SystemST h) -> String -> Eff (canvas :: CANVAS, dom :: DOM, st :: ST h, now :: Now | eff) Unit
+command :: forall eff h. (Partial) => STRef h UIConf -> STRef h UIST -> STRef h EngineConf -> STRef h EngineST -> STRef h Pattern -> STRef h SystemConf -> STRef h (SystemST h) -> String -> Eff (canvas :: CANVAS, dom :: DOM, st :: ST h, now :: Now | eff) Unit
 command ucRef usRef ecRef esRef pRef scRef ssRef msg = handleError do
   systemConf <- lift $ readSTRef scRef
   systemST   <- lift $ readSTRef ssRef

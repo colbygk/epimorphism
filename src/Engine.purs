@@ -91,7 +91,7 @@ initEngineST sysConf engineConf systemST canvasId esRef' = do
   pure esRef
 
 -- do the thing!
-renderFrame :: forall eff h. SystemST h -> EngineConf -> EngineST -> Pattern -> Array Number -> Array Number -> Int -> EpiS eff h WebGLTexture
+renderFrame :: forall eff h. (Partial) => SystemST h -> EngineConf -> EngineST -> Pattern -> Array Number -> Array Number -> Int -> EpiS eff h WebGLTexture
 renderFrame systemST engineConf engineST pattern par zn frameNum = do
   let ctx = engineST.ctx
 

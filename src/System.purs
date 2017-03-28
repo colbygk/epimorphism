@@ -21,7 +21,7 @@ import Util (dbg, urlGet)
 
 data DataSource = LocalHTTP | LocalStorage | RemoteDB
 
-initSystemST :: forall eff h. String -> Epi eff (SystemST h)
+initSystemST :: forall eff h. (Partial) => String -> Epi eff (SystemST h)
 initSystemST host = do
   -- gather system data here
 
@@ -45,7 +45,7 @@ initSystemST host = do
     , indexLib      = indexLib
   }
 
-buildLib :: forall eff a. Schema -> String -> Epi eff (StrMap a)
+buildLib :: forall eff a. (Partial) => Schema -> String -> Epi eff (StrMap a)
 buildLib schema loc = do
   dt <- lift $ urlGet loc
   case dt of

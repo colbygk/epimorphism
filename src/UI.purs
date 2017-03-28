@@ -17,7 +17,7 @@ foreign import addGlobalEventListeners :: forall eff. (String -> Eff eff Unit) -
 foreign import registerAuxImages :: forall eff. Array String -> Eff eff Unit
 
 -- PUBLIC
-initUIST :: forall eff h. STRef h UIConf -> STRef h EngineConf -> STRef h EngineST -> STRef h Pattern -> STRef h SystemConf -> STRef h (SystemST h) -> EpiS (now :: Now | eff) h (STRef h UIST)
+initUIST :: forall eff h. (Partial) => STRef h UIConf -> STRef h EngineConf -> STRef h EngineST -> STRef h Pattern -> STRef h SystemConf -> STRef h (SystemST h) -> EpiS (now :: Now | eff) h (STRef h UIST)
 initUIST ucRef ecRef esRef pRef scRef ssRef = do
   let uiST = defaultUIST
   usRef  <- lift $ newSTRef uiST

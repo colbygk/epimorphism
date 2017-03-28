@@ -21,7 +21,7 @@ import Texture (uploadAux)
 import Util (unsafeCast, lg, now2, now, replaceAll, dbg, Now)
 
 -- compile shaders and load into systemST
-compileShaders :: forall eff h. SystemConf -> STRef h (SystemST h) -> EngineConf -> STRef h EngineST -> STRef h Pattern -> Boolean -> EpiS (now :: Now | eff) h Boolean
+compileShaders :: forall eff h. (Partial) => SystemConf -> STRef h (SystemST h) -> EngineConf -> STRef h EngineST -> STRef h Pattern -> Boolean -> EpiS (now :: Now | eff) h Boolean
 compileShaders sysConf ssRef engineConf esRef pRef full = do
   systemST <- lift $ readSTRef ssRef
   es <- lift $ readSTRef esRef
@@ -115,16 +115,16 @@ compileShaders sysConf ssRef engineConf esRef pRef full = do
     Nothing -> throwError "shouldn't call compile with an empty queue chump!"
 
 
-parseMain :: forall eff h. SystemST h -> Pattern -> Int -> EpiS eff h (Tuple String (Array String))
+parseMain :: forall eff h. (Partial) => SystemST h -> Pattern -> Int -> EpiS eff h (Tuple String (Array String))
 parseMain systemST pattern fract = do
   Tuple main' aux <- parseShader systemST pattern.main pattern.includes
   let main = replaceAll "\\$fract\\$" (show fract) main'
   pure $ Tuple main aux
 
-parseDisp :: forall eff h. SystemST h -> Pattern -> EpiS eff h String
+parseDisp :: forall eff h. (Partial) => SystemST h -> Pattern -> EpiS eff h String
 parseDisp systemST pattern = fst <$> parseShader systemST pattern.disp pattern.includes
 
-parseVert :: forall eff h. SystemST h -> Pattern -> EpiS eff h String
+parseVert :: forall eff h. (Partial) => SystemST h -> Pattern -> EpiS eff h String
 parseVert systemST pattern = fst <$> parseShader systemST pattern.vert []
 
 linkShader :: forall eff h. EngineST -> WebGLProgram -> EpiS eff h UniformBindings

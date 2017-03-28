@@ -19,7 +19,7 @@ import Text.Format (precision, format)
 import Util (dbg, intFromStringE, inj, randInt, numFromStringE, gmod)
 
 
-switch :: forall eff h. ScriptFn eff h
+switch :: forall eff h. (Partial) => ScriptFn eff h
 switch ssRef pRef t midPre idx dt = do
   CloneRes newRootN pattern mid <- getClone ssRef pRef midPre
   systemST <- lift $ readSTRef ssRef
@@ -143,7 +143,7 @@ switchModules ssRef t rootId childN m1 spd = do
   pure unit
 
 
-finishSwitch :: forall eff h. ScriptFn eff h
+finishSwitch :: forall eff h. (Partial) => ScriptFn eff h
 finishSwitch ssRef pRef t rootIdPre idx dt = do
   -- get data
   delay <- (loadLib "delay" dt "finishSwitch delay") >>= numFromStringE
